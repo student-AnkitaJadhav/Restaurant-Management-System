@@ -1,0 +1,19 @@
+# Dataset (must ignore)
+Dataset/
+Flask/restaurant1.csv
+
+# All CSV
+*.csv
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Models
+*.pkl
+
+# Other
+*.zip
+.DS_Store
+venv/
+*.egg-info/

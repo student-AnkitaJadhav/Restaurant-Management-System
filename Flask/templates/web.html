@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Recommendations — Restaurant Recommendation System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <span class="brand-icon">🍽</span>
+            <span class="brand-text">Restaurant Recommendation System</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/extractor" class="nav-link active nav-cta">Recommend</a>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Recommend Page -->
+<main class="recommend-main">
+    <div class="recommend-bg">
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+    </div>
+
+    <div class="container">
+        <div class="recommend-card">
+            <div class="rec-header">
+                <div class="rec-badge">✦ Smart Matching</div>
+                <h1 class="rec-title">Find Similar Restaurants</h1>
+                <p class="rec-desc">
+                    Enter a restaurant name from Bangalore's Zomato database and our AI will 
+                    find the top 10 most similar dining options based on cuisine and ratings.
+                </p>
+            </div>
+
+            <div class="search-form">
+                <label class="input-label" for="restaurant_name">
+                    Restaurant Name
+                </label>
+                <div class="input-group">
+                    <div class="input-icon">🔍</div>
+                    <input 
+                        type="text" 
+                        id="restaurant_name" 
+                        name="restaurant_name" 
+                        class="search-input"
+                        placeholder="e.g. Jalsa, Cinnamon, Biergarten..."
+                        value="{{ restaurant_name or '' }}"
+                        autocomplete="off"
+                    >
+                    <div class="autocomplete-dropdown" id="autocomplete"></div>
+                </div>
+
+                {% if error %}
+                <div class="error-box">
+                    <span class="error-icon">⚠️</span>
+                    <span>{{ error }}</span>
+                </div>
+                {% endif %}
+
+                <button class="btn-primary btn-search" onclick="getRecommendations()">
+                    <span>Click to see the recommendation</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Example restaurants -->
+            <div class="examples-section">
+                <p class="examples-label">Try these restaurants:</p>
+                <div class="examples-chips">
+                    <button class="chip" onclick="setRestaurant('Jalsa')">Jalsa</button>
+                    <button class="chip" onclick="setRestaurant('Cinnamon')">Cinnamon</button>
+                    <button class="chip" onclick="setRestaurant('Biergarten')">Biergarten</button>
+                    <button class="chip" onclick="setRestaurant('The Pallet')">The Pallet</button>
+                    <button class="chip" onclick="setRestaurant('Delhi Highway')">Delhi Highway</button>
+                    <button class="chip" onclick="setRestaurant('Meghana Foods')">Meghana Foods</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info cards -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-icon">📍</div>
+                <div>
+                    <strong>Bangalore Based</strong>
+                    <span>Zomato Bangalore restaurant data</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🧠</div>
+                <div>
+                    <strong>Content-Based AI</strong>
+                    <span>TF-IDF + Cosine Similarity</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">⭐</div>
+                <div>
+                    <strong>Sorted by Rating</strong>
+                    <span>Highest rated shown first</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="brand-icon">🍽</span>
+                <span>Restaurant Recommendation System</span>
+            </div>
+            <p>Powered by Content-Based Filtering · Zomato Bangalore Dataset · Flask · scikit-learn</p>
+        </div>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+function setRestaurant(name) {
+    document.getElementById('restaurant_name').value = name;
+    document.getElementById('restaurant_name').focus();
+}
+
+function getRecommendations() {
+    const name = document.getElementById('restaurant_name').value.trim();
+    if (!name) {
+        document.getElementById('restaurant_name').classList.add('shake');
+        setTimeout(() => document.getElementById('restaurant_name').classList.remove('shake'), 400);
+        return;
+    }
+    
+    const btn = document.querySelector('.btn-search');
+    btn.innerHTML = '<span class="loading-dots">Finding restaurants<span>.</span><span>.</span><span>.</span></span>';
+    btn.disabled = true;
+    
+    window.location.href = `/keywords?restaurant_name=${encodeURIComponent(name)}`;
+}
+
+// Enter key support
+document.getElementById('restaurant_name').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') getRecommendations();
+});
+
+// Autocomplete
+let debounceTimer;
+document.getElementById('restaurant_name').addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    const val = this.value.trim();
+    if (val.length < 2) {
+        document.getElementById('autocomplete').innerHTML = '';
+        return;
+    }
+    debounceTimer = setTimeout(() => {
+        fetch(`/search?q=${encodeURIComponent(val)}`)
+            .then(r => r.json())
+            .then(data => {
+                const ac = document.getElementById('autocomplete');
+                if (data.restaurants && data.restaurants.length > 0) {
+                    ac.innerHTML = data.restaurants.map(r => 
+                        `<div class="ac-item" onclick="setRestaurant('${r.replace(/'/g, "\\'")}')">${r}</div>`
+                    ).join('');
+                    ac.style.display = 'block';
+                } else {
+                    ac.innerHTML = '';
+                }
+            })
+            .catch(() => {});
+    }, 300);
+});
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.input-group')) {
+        document.getElementById('autocomplete').innerHTML = '';
+    }
+});
+</script>
+</body>
+</html>

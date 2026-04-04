@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Recommendation System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <span class="brand-icon">🍽</span>
+            <span class="brand-text">Restaurant Recommendation System</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/extractor" class="nav-link nav-cta">Recommend</a>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg">
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+        <div class="bg-circle c3"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-text">
+            <div class="hero-badge">✦ AI-Powered Dining Discovery</div>
+            <h1 class="hero-title">
+                Find Your <br>
+                <span class="highlight">Perfect</span><br>
+                Restaurant
+            </h1>
+            <p class="hero-desc">
+                In this age of information overload, people use a variety of strategies to make choices 
+                about where to dine. Our AI-powered recommender system analyzes cuisines, ratings, and 
+                reviews to find restaurants perfectly matched to your taste — sorted from highest rated.
+            </p>
+            <div class="hero-actions">
+                <span class="hero-label">Test the system</span>
+                <a href="/extractor" class="btn-primary">
+                    <span>Get Recommendations</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="food-card main-card">
+                <div class="card-img-wrap">
+                    <img src="{{ url_for('static', filename='images/hero-food.jpg') }}" 
+                         onerror="this.src=''; this.parentElement.innerHTML='<div class=\'img-placeholder\'>🍛</div>'"
+                         alt="Delicious Food" class="card-img">
+                </div>
+                <div class="card-body">
+                    <div class="card-badge">Top Rated</div>
+                    <h3>Biergarten</h3>
+                    <p>Continental, North Indian, Chinese</p>
+                    <div class="card-meta">
+                        <span class="rating">⭐ 4.83</span>
+                        <span class="cost">₹2,100 for two</span>
+                    </div>
+                </div>
+            </div>
+            <div class="food-card float-card fc1">
+                <div class="mini-emoji">🍜</div>
+                <div>
+                    <strong>Eggzotic</strong>
+                    <small>North Indian, Chinese</small>
+                </div>
+                <span class="mini-rating">3.77 ⭐</span>
+            </div>
+            <div class="food-card float-card fc2">
+                <div class="mini-emoji">🫕</div>
+                <div>
+                    <strong>Delhi Highway</strong>
+                    <small>North Indian, Mughlai</small>
+                </div>
+                <span class="mini-rating">4.41 ⭐</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it Works -->
+<section class="section how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">How It Works</div>
+            <h2 class="section-title">Content-Based Filtering</h2>
+            <p class="section-desc">Our system uses machine learning to find restaurants with similar cuisines and characteristics</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card" style="--delay: 0s">
+                <div class="step-num">01</div>
+                <div class="step-icon">🔍</div>
+                <h3>Enter Restaurant</h3>
+                <p>Type the name of a restaurant you enjoy or want similar recommendations for</p>
+            </div>
+            <div class="step-card" style="--delay: 0.1s">
+                <div class="step-num">02</div>
+                <div class="step-icon">🤖</div>
+                <h3>AI Analysis</h3>
+                <p>Our TF-IDF algorithm analyzes cuisine types and computes cosine similarity scores</p>
+            </div>
+            <div class="step-card" style="--delay: 0.2s">
+                <div class="step-num">03</div>
+                <div class="step-icon">📊</div>
+                <h3>Ranked Results</h3>
+                <p>Get 10 personalized recommendations sorted by similarity score and mean rating</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Scenarios Section -->
+<section class="section scenarios">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-badge">Use Cases</div>
+            <h2 class="section-title">Built For Everyone</h2>
+        </div>
+        <div class="scenario-grid">
+            <div class="scenario-card sc1">
+                <div class="sc-icon">👤</div>
+                <h3>Restaurant Visitors</h3>
+                <p>Discover new dining experiences that match your taste. Find hidden gems and top-rated restaurants tailored to your preferences.</p>
+            </div>
+            <div class="scenario-card sc2">
+                <div class="sc-icon">🏪</div>
+                <h3>Restaurant Owners</h3>
+                <p>Attract new customers and increase foot traffic. Leverage recommendations to align with your restaurant's offerings.</p>
+            </div>
+            <div class="scenario-card sc3">
+                <div class="sc-icon">🛵</div>
+                <h3>Food Delivery Platforms</h3>
+                <p>Help users discover nearby restaurants. Enhance user experience and increase order volume with smart recommendations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="section stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-num">7,000+</div>
+                <div class="stat-label">Restaurants Indexed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">100+</div>
+                <div class="stat-label">Cuisine Types</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">99%</div>
+                <div class="stat-label">Recommendation Accuracy</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">5★</div>
+                <div class="stat-label">Rating Scale</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to discover your next favourite restaurant?</h2>
+            <p>Try our recommendation engine — it takes just seconds</p>
+            <a href="/extractor" class="btn-primary btn-large">
+                <span>Start Exploring</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="brand-icon">🍽</span>
+                <span>Restaurant Recommendation System</span>
+            </div>
+            <p>Powered by Vivek Shende</p>
+        </div>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
