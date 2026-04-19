@@ -1,4 +1,4 @@
-# 🍽 Restaurant Recommendation System
+# Restaurant Recommendation System
 
 A full-stack AI-powered restaurant recommendation system using **Content-Based Filtering** 
 with TF-IDF Vectorization and Cosine Similarity. Built with Flask, scikit-learn, and the 
